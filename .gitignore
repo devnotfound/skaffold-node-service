@@ -1,0 +1,10 @@
+
+##MacOS junk files
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+app/node_modules
+app/.DS_Store
+app/.nyc_output
+app/unit-test-output

@@ -1,0 +1,26 @@
+openapi: "3.0.0"
+info:
+  title: Sample Petstore API spec
+  version: v1
+paths:
+  /status:
+    get:
+      operationId: getStatus
+      summary: Returns the status
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Status"
+  
+components:
+  schemas:
+    Status:
+      properties:
+        status:
+          type: string
+
+servers:
+  - url: https://localhost:8443

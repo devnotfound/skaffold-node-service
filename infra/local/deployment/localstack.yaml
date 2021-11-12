@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: localstack
+  labels:
+    app: localstack
+    tier: aws_backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: localstack
+  template:
+    metadata:
+      labels:
+        app: localstack
+        tier: aws_backend
+    spec:
+      containers:
+      - name: localstack-latest
+        image: localstack/localstack:latest
+        lifecycle: 
+          postStart:
+            exec:
+              # command: ["aws", "--endpoint-url=http://localhost:4566", "dynamodb", "create-table", "--table-name", "artwork", "--attribute-definitions", "AttributeName=id,AttributeType=S", "--key-schema", "AttributeName=id,KeyType=HASH", "--provisioned-throughput", "ReadCapacityUnits=5,WriteCapacityUnits=5", ";", "aws", "--endpoint-url=http://localhost:4566", "s3api", "create-bucket", "--bucket", "artwork", "--region", "ap-southeast-2"]
+              # command: [ "/bin/sh", "/init-scripts/localstack.sh" ]
+              command: [ "/bin/sh", "-c", "aws --endpoint-url=http://localhost:4566 s3api create-bucket --bucket artwork --region ap-southeast-2;aws --endpoint-url=http://localhost:4566 dynamodb create-table --table-name artwork --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --region ap-southeast-2" ]
+        # imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 4566
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 4566
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 4566
+        env:
+          - name: DEBUG
+            value: "1"
+          - name: SERVICES
+            value: "cloudformation,dynamodb,s3"
+          - name: DEFAULT_REGION
+            value: "us-east-1"
+          - name: AWS_REGION
+            value: "us-east-1"
+          - name: AWS_DEFAULT_REGION
+            value: "us-east-1"
+          - name: AWS_ACCESS_KEY_ID
+            value: "xxx"
+          - name: AWS_SECRET_ACCESS_KEY
+            value: "xxx"
+          - name: FORCE_NONINTERACTIVE
+            value: "true"
+# Uncomment if you need to mount some local directories            
+      #   volumeMounts:
+      #     - name:  init-scripts
+      #       mountPath: /init-scripts/
+      # volumes:
+      #   - name:  init-scripts
+      #     hostPath:
+      #       path:  /init-scripts/
+      #       type: Directory

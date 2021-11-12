@@ -1,0 +1,6 @@
+{
+  "extends": "./default-lint",
+  "env": {
+    "mocha": true
+  }
+}

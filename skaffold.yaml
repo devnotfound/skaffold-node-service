@@ -1,0 +1,52 @@
+apiVersion: skaffold/v2beta23
+kind: Config
+
+build:
+  artifacts:
+  - image: skaffold-node-service
+    context: .
+
+deploy:
+  kubectl:
+    manifests:
+      - infra/local/deployment/localstack.yaml
+      - infra/local/service/localstack.yaml
+      - infra/local/deployment/microservice.yaml
+      - infra/local/service/microservice.yaml
+
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      artifacts:
+      - image: skaffold-node-service
+        context: .
+        docker:
+          buildArgs:
+            NODE_ENV: development
+            USER: root
+        sync:
+          manual:
+          # Sync all the javascript files that are in the src folder
+          # with the container src folder
+          - src: 'app/src/**/*.js'
+            dest: '../'
+          - src: 'app/src/spec/**/*.yaml'
+            dest: '../'
+    deploy:
+      statusCheckDeadlineSeconds: 300
+      kubectl:
+        manifests:
+          - infra/local/deployment/localstack.yaml
+          - infra/local/service/localstack.yaml
+          - infra/local/deployment/microservice.yaml
+          - infra/local/service/microservice.yaml
+  
+  # uncomment below if you like to port forward container ports not included above
+    # portForward:
+    # - resourceType: deployment
+    #   resourceName: cognito
+    #   namespace: default
+    #   port: 8000
+    #   localPort: 8000
