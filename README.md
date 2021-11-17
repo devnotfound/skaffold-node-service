@@ -11,6 +11,7 @@ This repo can also act as a customizable template to building your own microserv
 - Uses a declarative approach to adding new 'routes' (aka api operations) to your code (using 'fastify-openapi-glue')
 - 'Decorates' your route with a generic exception handler, avoiding the need to litter common try catch blocks throughout your code. 
 - Comes with an extensible eslint configuration
+- Exposes an OpenAPI / Swagger UI on https://localhost:8443/documentation
 
 ## Infra Features:
 
@@ -30,3 +31,5 @@ This repo can also act as a customizable template to building your own microserv
     - make build-ms
 - Finally, start service
     - make start
+- To see the minikube dashboard
+    - make dashboard-mk

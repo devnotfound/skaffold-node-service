@@ -55,7 +55,7 @@ start-mk:
 stop-mk: 
 		minikube stop
 dashboard-mk:
-		minikube dash
+		minikube dashboard
 
 # mics targets		
 delete-image:

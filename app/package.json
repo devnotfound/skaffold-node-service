@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "fastify": "^3.21.1",
-    "fastify-openapi-glue": "^2.6.5"
+    "fastify-openapi-glue": "^2.6.5",
+    "fastify-swagger": "^4.12.6"
   }
 }

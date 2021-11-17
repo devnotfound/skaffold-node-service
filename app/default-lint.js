@@ -37,6 +37,6 @@ module.exports = {
     ],
     semi: ['error', 'always'],
     'prettier/prettier': ['error', { singleQuote: true, printWidth: 100 }],
-    // 'object-shorthand': ['error', 'always'],
+    'object-shorthand': ['error', 'always'],
   },
 };

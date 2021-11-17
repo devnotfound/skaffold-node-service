@@ -1,4 +1,4 @@
-const wrapRoute = (routeObjectList, logger) => {
+const createRouteList = (routeObjectList, _logger) => {
   const wrappedObject = {};
   if (!Array.isArray(routeObjectList)) {
     throw new Error(
@@ -12,16 +12,16 @@ const wrapRoute = (routeObjectList, logger) => {
           `Invalid entry encountered while trying wrap route. Expected type function received ${typeof value}`
         );
       }
-      wrappedObject[key] = wrappedFunction(value, logger);
+      wrappedObject[key] = value;
     });
   });
   return wrappedObject;
 };
 
-const wrappedFunction = (routeCallback, logger) =>
+const _wrappedFunction = (routeFn, logger) =>
   async function (request, reply) {
     try {
-      const result = await routeCallback(request, reply);
+      const result = await routeFn(request, reply);
       if (result) {
         return reply.send(result);
       }
@@ -38,4 +38,4 @@ const internalServerError = {
   message: 'Internal server error occurred try again',
 };
 
-module.exports = wrapRoute;
+module.exports = createRouteList;
