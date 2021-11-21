@@ -8,6 +8,7 @@ const fastify = require('fastify')({
     cert: readFileSync(join(__dirname, '..', '..', 'certs', 'server.cert')),
   },
 });
+const defaultErrorHandler = require('./lib-http/defaultErrorHandler');
 
 const runServer = async () => {
   try {
@@ -20,22 +21,6 @@ const runServer = async () => {
     fastify.log.error(`error occurred while trying to start app ${err.message}`);
     throw err;
   }
-};
-
-process.on('unhandledRejection', () => {
-  fastify.log.error(`unhandledRejection encountered`);
-});
-
-const defaultErrorHandler = function (error, request, reply) {
-  // Log error
-  this.log.error(`Error caught by default handler. Error Message [${error}]`);
-  // Send error response
-  return reply.status(500).send(internalServerError);
-};
-
-const internalServerError = {
-  error: 'Internal server error',
-  message: 'Internal server error occurred try again',
 };
 
 module.exports = runServer;
