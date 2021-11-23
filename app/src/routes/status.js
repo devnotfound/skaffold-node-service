@@ -1,6 +1,6 @@
 const statusRoute = (logger, service) => {
-  const getStatus = async (request, reply) => {
-    const result = await service.getStatus();
+  const getStatus = (request, reply) => {
+    const result = service.getStatus();
     return reply.send(result);
   };
   return {
